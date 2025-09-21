@@ -57,7 +57,7 @@ app.get('/test-icon-app', (req, res) => {
 // Email configuration with error handling
 let transporter;
 try {
-  transporter = nodemailer.createTransporter({
+  transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
