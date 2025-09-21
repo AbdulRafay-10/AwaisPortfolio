@@ -13,25 +13,12 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files with proper MIME types
-app.use('/assets', express.static(path.join(__dirname, 'assets'), {
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    } else if (filePath.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    } else if (filePath.endsWith('.png') || filePath.endsWith('.jpg') || filePath.endsWith('.jpeg') || filePath.endsWith('.gif') || filePath.endsWith('.svg')) {
-      res.setHeader('Content-Type', 'image/' + path.extname(filePath).slice(1));
-    }
-  }
-}));
-
-// Serve other static files
+// Serve static files with proper headers
 app.use(express.static('.', {
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.css')) {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css');
-    } else if (filePath.endsWith('.js')) {
+    } else if (path.endsWith('.js')) {
       res.setHeader('Content-Type', 'application/javascript');
     }
   }
@@ -39,10 +26,10 @@ app.use(express.static('.', {
 
 // Email configuration
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'gmail', // You can change this to your preferred email service
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.EMAIL_USER, // Your email
+    pass: process.env.EMAIL_PASS  // Your email password or app password
   }
 });
 
@@ -68,10 +55,11 @@ app.post('/api/contact', async (req, res) => {
     // Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // Send to your email
       subject: `🚀 New Portfolio Inquiry from ${fullname}`,
       html: `
         <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 700px; margin: 0 auto; background: #ffffff;">
+          <!-- Header -->
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
             <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">
               💼 Portfolio Contact
@@ -81,6 +69,7 @@ app.post('/api/contact', async (req, res) => {
             </p>
           </div>
           
+          <!-- Main Content -->
           <div style="padding: 40px 30px; background: #ffffff;">
             <div style="background: #f8f9ff; padding: 25px; border-radius: 10px; margin-bottom: 25px; border-left: 5px solid #667eea;">
               <h2 style="color: #333; margin: 0 0 20px 0; font-size: 22px; font-weight: 600;">
@@ -98,6 +87,7 @@ app.post('/api/contact', async (req, res) => {
               </div>
             </div>
             
+            <!-- Message Section -->
             <div style="background: #ffffff; padding: 25px; border-radius: 10px; border: 2px solid #f0f0f0;">
               <h3 style="color: #333; margin: 0 0 15px 0; font-size: 20px; font-weight: 600;">
                 💬 Message
@@ -107,6 +97,7 @@ app.post('/api/contact', async (req, res) => {
               </div>
             </div>
             
+            <!-- Quick Reply Button -->
             <div style="text-align: center; margin: 30px 0;">
               <a href="mailto:${email}?subject=Re: Portfolio Inquiry&body=Hi ${fullname},%0D%0A%0D%0AThank you for reaching out through my portfolio!%0D%0A%0D%0A" 
                  style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: 600; font-size: 16px; display: inline-block;">
@@ -115,6 +106,7 @@ app.post('/api/contact', async (req, res) => {
             </div>
           </div>
           
+          <!-- Footer -->
           <div style="background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; border-top: 1px solid #e9ecef;">
             <p style="margin: 0; color: #6c757d; font-size: 14px;">
               📅 Received on ${new Date().toLocaleString()} via your portfolio contact form
