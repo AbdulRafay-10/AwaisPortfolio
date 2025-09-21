@@ -12,6 +12,14 @@
       "dest": "server.js"
     },
     {
+      "src": "/test-svg",
+      "dest": "server.js"
+    },
+    {
+      "src": "/test-icon-app",
+      "dest": "server.js"
+    },
+    {
       "src": "/assets/(.*)",
       "dest": "server.js"
     },

@@ -13,9 +13,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files with proper MIME types
+// Serve static files with explicit MIME types
 app.use('/assets', express.static(path.join(__dirname, 'assets'), {
   setHeaders: (res, filePath) => {
+    console.log('Serving file:', filePath);
     if (filePath.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css');
     } else if (filePath.endsWith('.js')) {
@@ -46,6 +47,11 @@ app.get('/test-svg', (req, res) => {
       <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
     </svg>
   `);
+});
+
+// Test specific SVG file
+app.get('/test-icon-app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'assets/images/icon-app.svg'));
 });
 
 // Email configuration with error handling
