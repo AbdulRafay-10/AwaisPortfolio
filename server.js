@@ -16,18 +16,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files
 app.use(express.static('.'));
 
-// Email configuration
-const transporter = nodemailer.createTransporter({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+// Email configuration with error handling
+let transporter;
+try {
+  transporter = nodemailer.createTransporter({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+} catch (error) {
+  console.error('Email configuration error:', error);
+}
 
 // Contact form endpoint
 app.post('/api/contact', async (req, res) => {
   try {
+    // Check if email is configured
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      return res.status(500).json({
+        success: false,
+        message: 'Email service not configured. Please contact the administrator.'
+      });
+    }
+
     const { fullname, email, message } = req.body;
 
     // Validate required fields
@@ -137,7 +150,11 @@ app.post('/api/contact', async (req, res) => {
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Contact API is running' });
+  res.json({ 
+    status: 'OK', 
+    message: 'Contact API is running',
+    emailConfigured: !!(process.env.EMAIL_USER && process.env.EMAIL_PASS)
+  });
 });
 
 // Serve the main HTML file
