@@ -22,16 +22,31 @@ app.use('/assets', express.static(path.join(__dirname, 'assets'), {
       res.setHeader('Content-Type', 'application/javascript');
     } else if (filePath.endsWith('.svg')) {
       res.setHeader('Content-Type', 'image/svg+xml');
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
     } else if (filePath.endsWith('.png')) {
       res.setHeader('Content-Type', 'image/png');
     } else if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg')) {
       res.setHeader('Content-Type', 'image/jpeg');
+    } else if (filePath.endsWith('.ico')) {
+      res.setHeader('Content-Type', 'image/x-icon');
+    } else if (filePath.endsWith('.pdf')) {
+      res.setHeader('Content-Type', 'application/pdf');
     }
   }
 }));
 
 // Serve other static files
 app.use(express.static('.'));
+
+// Test SVG endpoint
+app.get('/test-svg', (req, res) => {
+  res.setHeader('Content-Type', 'image/svg+xml');
+  res.send(`
+    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+    </svg>
+  `);
+});
 
 // Email configuration with error handling
 let transporter;
