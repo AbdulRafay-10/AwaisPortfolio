@@ -13,46 +13,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files with explicit MIME types
-app.use('/assets', express.static(path.join(__dirname, 'assets'), {
-  setHeaders: (res, filePath) => {
-    console.log('Serving file:', filePath);
-    if (filePath.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    } else if (filePath.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    } else if (filePath.endsWith('.svg')) {
-      res.setHeader('Content-Type', 'image/svg+xml');
-      res.setHeader('Cache-Control', 'public, max-age=31536000');
-    } else if (filePath.endsWith('.png')) {
-      res.setHeader('Content-Type', 'image/png');
-    } else if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg')) {
-      res.setHeader('Content-Type', 'image/jpeg');
-    } else if (filePath.endsWith('.ico')) {
-      res.setHeader('Content-Type', 'image/x-icon');
-    } else if (filePath.endsWith('.pdf')) {
-      res.setHeader('Content-Type', 'application/pdf');
-    }
-  }
-}));
-
-// Serve other static files
+// Serve static files
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.static('.'));
-
-// Test SVG endpoint
-app.get('/test-svg', (req, res) => {
-  res.setHeader('Content-Type', 'image/svg+xml');
-  res.send(`
-    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-    </svg>
-  `);
-});
-
-// Test specific SVG file
-app.get('/test-icon-app', (req, res) => {
-  res.sendFile(path.join(__dirname, 'assets/images/icon-app.svg'));
-});
 
 // Email configuration with error handling
 let transporter;
