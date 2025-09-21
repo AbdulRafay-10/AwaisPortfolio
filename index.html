@@ -1051,13 +1051,13 @@ With a passion for innovation and clean coding practices, I aim to deliver end-t
 
     <form id="contactForm" class="form" data-form>
       <div class="input-wrapper">
-        <input type="text" id="fullname" name="fullname" class="form-input" placeholder="Full name" required>
-        <input type="email" id="email" name="email" class="form-input" placeholder="Email address" required>
+        <input type="text" id="fullname" name="fullname" class="form-input" data-form-input placeholder="Full name" required>
+        <input type="email" id="email" name="email" class="form-input" data-form-input placeholder="Email address" required>
       </div>
 
-      <textarea id="message" name="message" class="form-input" placeholder="Your Message" required></textarea>
+      <textarea id="message" name="message" class="form-input" data-form-input placeholder="Your Message" required></textarea>
 
-      <button class="form-btn" type="submit">
+      <button class="form-btn" type="submit" data-form-btn>
         <ion-icon name="paper-plane"></ion-icon>
         <span>Send Message</span>
       </button>
@@ -1066,22 +1066,6 @@ With a passion for innovation and clean coding practices, I aim to deliver end-t
   </section>
 
 </article>
-
-<script>
-  document.getElementById("contactForm").addEventListener("submit", function(e) {
-    e.preventDefault(); // stop form from reloading page
-
-    const name = document.getElementById("fullname").value;
-    const email = document.getElementById("email").value;
-    const message = document.getElementById("message").value;
-
-    const subject = "New Contact Form Submission";
-    const body = `Full Name: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0AMessage:%0D%0A${message}`;
-
-    // change email below to your receiving email
-    window.location.href = `mailto:youremail@example.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-  });
-</script>
 
 
     </div>

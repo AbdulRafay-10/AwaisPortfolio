@@ -134,6 +134,79 @@ for (let i = 0; i < formInputs.length; i++) {
   });
 }
 
+// Contact form submission handler
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  
+  const submitBtn = form.querySelector('.form-btn');
+  const originalText = submitBtn.innerHTML;
+  
+  // Show loading state
+  submitBtn.innerHTML = `
+    <ion-icon name="hourglass-outline"></ion-icon>
+    <span>Sending...</span>
+  `;
+  submitBtn.disabled = true;
+  
+  try {
+    const formData = new FormData(form);
+    const data = {
+      fullname: formData.get('fullname'),
+      email: formData.get('email'),
+      message: formData.get('message')
+    };
+    
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      // Show success message
+      submitBtn.innerHTML = `
+        <ion-icon name="checkmark-circle"></ion-icon>
+        <span>Message Sent!</span>
+      `;
+      submitBtn.style.backgroundColor = '#28a745';
+      
+      // Reset form
+      form.reset();
+      
+      // Reset button after 3 seconds
+      setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.style.backgroundColor = '';
+        submitBtn.disabled = false;
+      }, 3000);
+      
+    } else {
+      throw new Error(result.message || 'Failed to send message');
+    }
+    
+  } catch (error) {
+    console.error('Error:', error);
+    
+    // Show error message
+    submitBtn.innerHTML = `
+      <ion-icon name="close-circle"></ion-icon>
+      <span>Error! Try Again</span>
+    `;
+    submitBtn.style.backgroundColor = '#dc3545';
+    
+    // Reset button after 3 seconds
+    setTimeout(() => {
+      submitBtn.innerHTML = originalText;
+      submitBtn.style.backgroundColor = '';
+      submitBtn.disabled = false;
+    }, 3000);
+  }
+});
+
 
 
 // page navigation variables
