@@ -1,5 +1,3 @@
-
-
 :root {
 
   /**
@@ -304,6 +302,7 @@ main {
   max-height: 112px;
   overflow: hidden;
   transition: var(--transition-2);
+  z-index: 1;
 }
 
 .sidebar.active { max-height: 405px; }
@@ -313,13 +312,13 @@ main {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 15px;
+z-index: 10;  
 }
 
 .avatar-box {
-  background: var(--bg-gradient-onyx);
+  background: transparent; /* remove gray background */
   border-radius: 15px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 
@@ -1237,24 +1236,36 @@ main {
 /* Online Status with Radar Waves */
 .online-status {
   position: absolute;
-  bottom: 5px;
+  bottom: 10px;
   right: 5px;
   width: 20px;
   height: 20px;
-  z-index: 2;
+  
+ 
 }
 
 .status-dot {
-  position: relative;
-  bottom: -10px;
-  right: -10px;
+  position: absolute;
+  bottom: -0px;
+  right: -0px;
   width: 20px;
   height: 12px;
   background: #00ff00;
   border: 2px solid var(--eerie-black-2);
   border-radius: 50%;
-  z-index: 3;
+ z-index: 30;
   animation: pulse 2s infinite;
+}
+
+/* Ensure the status dot stacks on top of the profile image inside avatar */
+.avatar-box { position: relative; overflow: visible; background: transparent; box-shadow: none; border: none; }
+.avatar-box img { display: block; width: 100%; height: 100%; border-radius: 20%; object-fit: cover; object-position: top center; aspect-ratio: 1 / 1; }
+.avatar-box .status-dot {
+  bottom: 0px;  /* half outside vertically */
+  right: 2px;   /* half outside horizontally */
+  width: 15px;
+  height: 15px;
+  z-index: 10;   /* ensure above the image */
 }
 
 
@@ -1713,6 +1724,7 @@ textarea.form-input::-webkit-resizer { display: none; }
     width: 520px;
     margin-inline: auto;
     padding: 30px;
+    z-index: 1;
   }
 
   .article-title {
@@ -1752,6 +1764,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   .sidebar {
     max-height: 180px;
     margin-bottom: 30px;
+    z-index: 10;
   }
 
   .sidebar.active { max-height: 584px; }
@@ -1812,6 +1825,8 @@ textarea.form-input::-webkit-resizer { display: none; }
   /**
    * #NAVBAR
    */
+
+  .navbar { border-radius: 20px 20px 0 0; }
 
   .navbar { border-radius: 20px 20px 0 0; }
 
@@ -2355,17 +2370,28 @@ textarea.form-input::-webkit-resizer { display: none; }
   .avatar-box img { width: 150px; }
 
   .online-status {
-    bottom: 10px;
-    right: 10px;
-    width: 28px;
-    height: 28px;
-  }
+  position: absolute;
+  /* Place the dot inside the image, bottom right, but a bit upward */
+  bottom: 12px;   /* Increase this value to move the dot further up */
+  right: 12px;    /* Adjust as needed for your image size */
+  width: 20px;
+  height: 20px;
+  pointer-events: none; 
+  z-index: 2;
+}
 
-  .status-dot {
-    width: 18px;
-    height: 18px;
-  }
-
+.status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: #00ff00;
+  border: 2px solid var(--eerie-black-2);
+  border-radius: 50%;
+  z-index: 3;
+  animation: pulse 2s infinite;
+}
   .radar-wave {
     bottom: 10px;
     right: 10px;
