@@ -1,3 +1,66 @@
+/* Under 290px: keep name to the right of the image */
+@media (max-width: 289px) {
+  .sidebar .sidebar-info {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px;
+  }
+  .sidebar .avatar-box { flex: 0 0 auto; }
+  .sidebar .info-content { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+  .sidebar .social-list { justify-content: flex-start; }
+}
+
+/* Mirror 580px layout below 580 with scaled sizes */
+@media (max-width: 579px) {
+  body .sidebar .sidebar-info {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    text-align: left !important;
+    gap: 16px !important; /* slightly smaller than 25px at >=580px */
+  }
+  body .sidebar .avatar-box,
+  body .sidebar .avatar-box img {
+    width: 66px !important;
+    height: 66px !important;
+  }
+  body .sidebar .info-content { align-items: flex-start !important; text-align: left !important; }
+  body .sidebar .social-list { justify-content: flex-start !important; }
+}
+/* Center only avatar, name/title, and social icons for 450–559px */
+@media (min-width: 450px) and (max-width: 559px) {
+  .sidebar .sidebar-info {
+    display: flex;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 10px;
+  }
+  .sidebar .avatar-box { margin-left: auto; margin-right: auto; }
+  .sidebar .info-content { display: flex; flex-direction: column  ; align-items: center !important; text-align: center !important; width: 100%; margin-inline: auto; }
+  .sidebar .info-content .name,
+  .sidebar .info-content .title { display: inline-block; margin-left: auto; margin-right: auto; text-align: center; }
+  .sidebar .social-list { justify-content: center; }
+}
+/* 450–559px: place name/title to the right of the image */
+@media (min-width: 450px) and (max-width: 559px) {
+  .sidebar .sidebar-info {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    gap: 12px;
+  }
+  .sidebar .avatar-box { margin-left: 0; margin-right: 0; }
+  .sidebar .info-content { display: flex; flex-direction: column; align-items: flex-start !important; text-align: left !important; width: auto; margin-inline: 0; }
+  .sidebar .info-content .name,
+  .sidebar .info-content .title { display: block; margin: 0; text-align: left; }
+  .sidebar .social-list { justify-content: flex-start; }
+}
 :root {
 
   /**
@@ -312,6 +375,7 @@ main {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap; /* allow wrapping on small screens */
 z-index: 10;  
 }
 
@@ -1684,6 +1748,18 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 }
 
+/* Extra-small screens tweaks */
+@media (max-width: 449px) {
+  .sidebar-info {
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+  }
+  .avatar-box img { max-width: 100px; margin-inline: auto; }
+  .info-content .name { width: 100%; }
+  .social-list { justify-content: center; }
+}
+
 
 
 
@@ -1767,7 +1843,7 @@ textarea.form-input::-webkit-resizer { display: none; }
     z-index: 10;
   }
 
-  .sidebar.active { max-height: 584px; }
+.sidebar.active { max-height: 1000px; /* more room for wrapped content on small screens */ }
 
   .sidebar-info { gap: 25px; }
 
@@ -1922,6 +1998,39 @@ textarea.form-input::-webkit-resizer { display: none; }
   gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+/* Reduce avatar image size on small screens */
+@media (max-width: 579px) {
+  .sidebar-info { gap: 10px; }
+  .sidebar .avatar-box { margin-inline: auto; flex: 0 0 auto; }
+  .sidebar .online-status { bottom: 6px; right: 6px; width: 12px; height: 12px; }
+  .sidebar .status-dot { width: 8px; height: 8px; }
+}
+
+/* Extra clamp for 300px–579px: keep avatar compact */
+@media (min-width: 300px) and (max-width: 579px) {
+  .sidebar .avatar-box,
+  .sidebar .avatar-box img { width: 56px !important; height: 56px !important; }
+}
+
+/* Tighter size specifically for 450–579px range */
+@media (min-width: 450px) and (max-width: 579px) {
+  /* Force a smaller avatar with higher specificity */
+  .sidebar .sidebar-info .avatar-box,
+  .sidebar .sidebar-info .avatar-box img {
+    width: 40px !important;
+    height: 40px !important;
+    flex: 0 0 40px !important;
+  }
+  .sidebar .online-status { width: 10px; height: 10px; bottom: 2px; right: 2px; }
+  .sidebar .status-dot { width: 8px; height: 8px; }
+}
+
+/* Hard clamp using element selector to override any global rules */
+@media (max-width: 579px) {
+  figure.avatar-box { width: 40px !important; height: 40px !important; }
+  figure.avatar-box > img { width: 40px !important; height: 40px !important; }
 }
 
 /* Match project image height to text height on larger screens */
